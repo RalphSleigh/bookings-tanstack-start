@@ -1,5 +1,5 @@
 import { Firestore } from '@google-cloud/firestore'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouteContext } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
@@ -42,11 +42,13 @@ export const Route = createFileRoute('/')({
   component: App })
 
 function App() {
+  const context = useRouteContext({from: '/'})
   const todos = useSuspenseQuery(getTodoQueryOptions)
   const [todo, setTodo] = useState('')
   const submitTodo = useCallback(async () => {
       await createTodo({data: { name: todo }})
       setTodo('')
+      context.queryClient.invalidateQueries({ queryKey:['todos']})
     }, [todo])
   return (
     <>
