@@ -61,6 +61,6 @@ jobs:
 
       - name: Build Container
         run: |
-          docker build -t europe-west2-docker-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookings-docker-repo/bookings-app:${{github.run_number}} .
+          docker build -t europe-west2-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookings-docker-repo/bookings-app:${{github.run_number}} .
           gcloud auth configure-docker europe-west2-docker.pkg.dev
-          docker push europe-west2-docker-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookings-docker-repo/bookings-app:${{github.run_number}}
+          docker push europe-west2-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookings-docker-repo/bookings-app:${{github.run_number}}
