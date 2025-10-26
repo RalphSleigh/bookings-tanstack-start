@@ -13,12 +13,12 @@ on:
         required: true
       PROJECT_ID:
         required: true
-        
+
 permissions:
   id-token: write
   contents: read
 
-concurrency: 
+concurrency:
   group: ${{ inputs.environment }}
   cancel-in-progress: true
 
@@ -29,7 +29,7 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       NODE_ENV: production
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,15 +52,20 @@ jobs:
       - name: terraform apply (API Services)
         working-directory: terraform
         run: |
-          terraform apply -auto-approve -target=google_project_service.services --var="project_id=${{ secrets.PROJECT_ID }}"
+          terraform apply -auto-approve -target=google_project_service.services --var="project_id=${{ secrets.PROJECT_ID }}" --var="run_id=${{ github.run_number }}"
 
       - name: terraform apply (Artifact)
         working-directory: terraform
         run: |
-          terraform apply -auto-approve -target=google_artifact_registry_repository.google_artifact_registry_repository --var="project_id=${{ secrets.PROJECT_ID }}"
+          terraform apply -auto-approve -target=google_artifact_registry_repository.google_artifact_registry_repository --var="project_id=${{ secrets.PROJECT_ID }}" --var="run_id=${{ github.run_number }}"
 
       - name: Build Container
         run: |
           docker build -t europe-west2-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookings-docker-repo/bookings-app:${{github.run_number}} .
           gcloud auth configure-docker europe-west2-docker.pkg.dev
           docker push europe-west2-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookings-docker-repo/bookings-app:${{github.run_number}}
+
+      - name: terraform apply
+        working-directory: terraform
+        run: |
+          terraform apply -auto-approve --var="project_id=${{ secrets.PROJECT_ID }}" --var="run_id=${{ github.run_number }}"

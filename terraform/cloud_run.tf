@@ -12,7 +12,7 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     service_account = google_service_account.service_account.email
     containers {
-      image = "europe-west2-docker.pkg.dev/bookings-gcp/bookings-docker-repo/nitro-app:5"
+      image = "europe-west2-docker.pkg.dev/${var.project_id}/bookings-docker-repo/bookings-app:${var.run_id}"
       env {
         name  = "GRPC_TRACE"
         value = "all"
