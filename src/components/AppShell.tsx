@@ -1,7 +1,7 @@
 import { AppShell, Box, Text } from '@mantine/core'
 import { Outlet } from '@tanstack/react-router'
 
-import classes from '../css/mainArea.module.css'
+import classes from '../css/mainarea.module.css'
 import { AppToolbar } from './AppToolBar'
 import dayjs from 'dayjs'
 
