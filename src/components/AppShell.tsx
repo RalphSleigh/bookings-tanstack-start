@@ -5,8 +5,6 @@ import classes from '../css/mainArea.module.css'
 import { AppToolbar } from './AppToolBar'
 import dayjs from 'dayjs'
 
-
-
 export const Shell = () => {
   return (
     <AppShell header={{ height: 48 }}>
