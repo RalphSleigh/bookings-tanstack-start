@@ -17,6 +17,8 @@ export type AppConfigType = {
   DISCORD_WEBHOOK_URL: string,
 }
 
+const importWithoutVite = (path: string) => import(/* @vite-ignore */path);
+
 export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async () => {
   if(process.env.IN_CONTAINER === 'true') {
     const client = new ParameterManagerClient()
@@ -29,6 +31,6 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async 
 
   } else {
     // this only exists for local development
-    return await import(/* @vite-ignore */'../../config.json') as AppConfigType
+    return await importWithoutVite('../../config.json') as AppConfigType
   }
 })
