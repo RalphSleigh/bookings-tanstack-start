@@ -1,5 +1,5 @@
 resource "google_firestore_database" "database" {
-  name        = "todos"
+  name        = "bookings"
   location_id = "europe-west2"
   type        = "FIRESTORE_NATIVE"
 }

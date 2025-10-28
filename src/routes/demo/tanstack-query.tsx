@@ -4,7 +4,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { Firestore } from '@google-cloud/firestore'
 
 const firestore = new Firestore({
-  databaseId: 'todos',
+  databaseId: 'bookings',
 })
 
 const getTodos = createServerFn({ method: 'GET' }).handler(async ({data}) => {
