@@ -21,6 +21,14 @@ resource "google_cloud_run_v2_service" "default" {
         name  = "GRPC_VERBOSITY"
         value = "DEBUG"
       }
+      env {
+        name  = "IN_CONTAINER"
+        value = "true"
+      }
+      env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = var.project_id
+      }
       resources {
         limits = {
           cpu    = "0.25"

@@ -22,8 +22,13 @@ const importWithoutVite = (path: string) => import(/* @vite-ignore */path);
 export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async () => {
   if(process.env.IN_CONTAINER === 'true') {
     const client = new ParameterManagerClient()
+
+    const parameterName = `projects/${process.env.GOOGLE_CLOUD_PROJECT}/locations/global/parameters/config/versions/latest`
+    console.log('Fetching parameter:', parameterName)
+
+
     const parameters = await client.renderParameterVersion({
-      name: 'config',
+      name: parameterName,
     })
 
     console.log(JSON.stringify(parameters[0], null, 2))
