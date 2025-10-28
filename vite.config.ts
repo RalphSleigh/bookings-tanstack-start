@@ -19,10 +19,10 @@ const config = defineConfig({
     viteReact(),
   ],
   optimizeDeps: {
-    include: ['@google-cloud/firestore > google-gax'],
+    include: ['@google-cloud/firestore > google-gax', '@google-cloud/parametermanager > google-gax'],
   },
   ssr: {
-    external: ['@google-cloud/firestore'],
+    external: ['@google-cloud/firestore', '@google-cloud/parametermanager'],
     noExternal: ["@mantine/*"],
   },
   define: {
