@@ -125,6 +125,7 @@ export const Route = createFileRoute('/auth/callback')({
           console.log('FINAL USER:', user)
           //res.locals.logger.logToPath(user)
 
+          console.log('SETTING SESSION USER ID', user.id)
           const session = await useAppSession()
           await session.update({ userId: user.id })
 
