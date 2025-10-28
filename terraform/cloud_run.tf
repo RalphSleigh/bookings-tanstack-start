@@ -13,10 +13,10 @@ resource "google_cloud_run_v2_service" "default" {
     service_account = google_service_account.service_account.email
     containers {
       image = "europe-west2-docker.pkg.dev/${var.project_id}/bookings-docker-repo/bookings-app:${var.run_id}"
-      env {
+/*       env {
         name  = "GRPC_TRACE"
         value = "all"
-      }
+      } */
       env {
         name  = "GRPC_VERBOSITY"
         value = "DEBUG"

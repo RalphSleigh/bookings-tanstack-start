@@ -23,7 +23,7 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async 
   if(process.env.IN_CONTAINER === 'true') {
     const client = new ParameterManagerClient()
 
-    const parameterName = `projects/${process.env.GOOGLE_CLOUD_PROJECT}/locations/global/parameters/config/versions/latest`
+    const parameterName = `projects/${process.env.GOOGLE_CLOUD_PROJECT}/locations/global/parameters/config/versions/3`
     console.log('Fetching parameter:', parameterName)
 
 
