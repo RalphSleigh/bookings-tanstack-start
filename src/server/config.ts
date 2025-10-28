@@ -25,10 +25,10 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async 
     })
 
     console.log(JSON.stringify(parameters[0], null, 2))
-  
     return parameters[0] as AppConfigType
 
   } else {
-    return await import('../../config.json') as AppConfigType
+    // this only exists for local development
+    return await import(/* @vite-ignore */'../../config.json') as AppConfigType
   }
 })
