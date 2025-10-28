@@ -23,7 +23,7 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async 
   if(process.env.IN_CONTAINER === 'true') {
     const client = new ParameterManagerClient()
 
-    const parameterName = `projects/${process.env.GOOGLE_CLOUD_PROJECT}/locations/global/parameters/config/versions/3`
+    const parameterName = `projects/${process.env.GOOGLE_CLOUD_PROJECT}/locations/global/parameters/config/versions/latest`
     console.log('Fetching parameter:', parameterName)
 
 
@@ -31,8 +31,14 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(async 
       name: parameterName,
     })
 
-    console.log(JSON.stringify(parameters[0], null, 2))
-    return parameters[0] as AppConfigType
+    if(!parameters[0].renderedPayload) {
+      throw new Error('Failed to fetch parameter')
+    }
+
+    const config = JSON.parse(parameters[0].renderedPayload.toString()) as AppConfigType
+
+    console.log(JSON.stringify(config, null, 2))
+    return config
 
   } else {
     // this only exists for local development
