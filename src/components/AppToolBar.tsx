@@ -6,12 +6,9 @@ import {
   Button,
   Flex,
   Text,
-  ThemeIcon,
-  Title,
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
 import { IconBug, IconLogout, IconMoon, IconSun } from '@tabler/icons-react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useRouteContext, useSearch } from '@tanstack/react-router'
@@ -21,6 +18,7 @@ import cx from 'clsx'
 /* import { envQueryOptions } from '../queries/env' */
 import { CustomLink } from '../utils/customlink'
 import classes from '../css/darkmodeIcon.module.css'
+import { userQueryOptions } from '@/queries/user'
 
 //import { useSuspenseIfUser } from '../queries/useSuspenseWrapper';
 
@@ -64,7 +62,7 @@ export const AppToolbar = () => {
         </CustomLink>
         <Box component="div" flex={1} />
 
-        {/* <UserStatus /> */}
+        <UserStatus />
         <ActionIcon
           variant="default"
           size="input-sm"
@@ -107,10 +105,10 @@ export const AppToolbar = () => {
   )
 }
 
-/* const UserStatus = () => {
-  const { auth } = useRouteContext({ from: '__root__' })
+const UserStatus = () => {
+  //const { auth } = useRouteContext({ from: '__root__' })
   const query = useSearch({ from: '__root__' })
-  const user = auth.loggedIn ? auth.user : undefined
+  const user = useSuspenseQuery(userQueryOptions).data
   if (user) {
     return (
       <>
@@ -134,10 +132,10 @@ export const AppToolbar = () => {
     )
   } else {
     return (
-      <Button component="a" variant="default" href={query.redirect ? `/api/auth/redirect?redirect=${query.redirect}` : '/api/auth/redirect'}>
+      <Button component="a" variant="default" href={query.redirect ? `/auth/redirect?redirect=${query.redirect}` : '/auth/redirect'}>
         Login
       </Button>
     )
   }
 }
- */
+

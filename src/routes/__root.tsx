@@ -8,15 +8,19 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
-import type { QueryClient } from '@tanstack/react-query'
+import { queryOptions, type QueryClient } from '@tanstack/react-query'
 
-import { MantineProvider, ColorSchemeScript, mantineHtmlProps } from '@mantine/core'
+import {
+  MantineProvider,
+  ColorSchemeScript,
+  mantineHtmlProps,
+} from '@mantine/core'
 import { Shell } from '@/components/AppShell'
 
 import mantineCssUrl from '@mantine/core/styles.css?url'
 import mantineDateCssUrl from '@mantine/dates/styles.css?url'
 import mantineNotificationsCssUrl from '@mantine/notifications/styles.css?url'
-
+import { userQueryOptions } from '@/queries/user'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -26,12 +30,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
       {
-				charSet: "utf-8",
-			},
-			{
-				name: "viewport",
-				content: "width=device-width, initial-scale=1",
-			},
+        charSet: 'utf-8',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
       {
         title: 'TanStack Start Starter',
       },
@@ -56,6 +60,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
 
+  beforeLoad: async ({ context }) => {
+    return context.queryClient.ensureQueryData(userQueryOptions)
+  },
+
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
+    // validate and parse the search params into a typed state
+    if (search.redirect) return { redirect: search.redirect as string }
+    return {}
+  },
   shellComponent: RootDocument,
 })
 
@@ -82,7 +95,7 @@ function RootDocument() {
             TanStackQueryDevtools,
           ]}
         />
-        
+
         <Scripts />
       </body>
     </html>
