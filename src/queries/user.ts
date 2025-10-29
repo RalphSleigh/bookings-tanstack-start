@@ -2,8 +2,15 @@ import { userRepo } from '@/server/firestore'
 import { useAppSession } from '@/server/session'
 import { queryOptions } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
+import { getCookies } from '@tanstack/react-start/server'
 
 const getCurrentUserFn = createServerFn({ method: 'GET' }).handler(async () => {
+
+  const cookie = getCookies()
+
+  console.log('CURRENT COOKIES:', JSON.stringify(cookie))
+
+
   const session = await useAppSession()
 
   console.log('CURRENT SESSION:', session)
