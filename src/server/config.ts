@@ -1,5 +1,6 @@
 import { createServerOnlyFn } from '@tanstack/react-start'
 import { ParameterManagerClient } from '@google-cloud/parametermanager'
+import NodeCache from 'node-cache'
 
 export type AppConfigType = {
   AUTH0_CLIENT_SECRET: string
@@ -26,14 +27,23 @@ const toNumber = (value: string | number | Long | null | undefined): number => {
   return 0
 }
 
+const configCache = new NodeCache({ useClones: false })
+
 export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(
   async () => {
     if (process.env.IN_CONTAINER === 'true') {
+      const cachedConfig = configCache.get<AppConfigType>('appConfig')
+
+      if (cachedConfig) {
+        console.log('Using cached config')
+        return cachedConfig
+      }
+
+      console.log('Fetching config from Parameter Manager')
+
       const client = new ParameterManagerClient()
 
       const parameterName = `projects/${process.env.GOOGLE_CLOUD_PROJECT}/locations/global/parameters/config`
-      console.log('Fetching parameter:', parameterName)
-
       const versions = await client.listParameterVersions({
         parent: parameterName,
       })
@@ -42,9 +52,7 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(
         (a, b) =>
           toNumber(b.updateTime?.seconds) - toNumber(a.updateTime?.seconds),
       )[0]
-
-      console.log('Available parameter versions:', JSON.stringify(versions))
-
+      
       const parameters = await client.renderParameterVersion({
         name: latestVersion.name!,
       })
@@ -57,7 +65,8 @@ export const getConfig: () => Promise<AppConfigType> = createServerOnlyFn(
         parameters[0].renderedPayload.toString(),
       ) as AppConfigType
 
-      //console.log(JSON.stringify(config, null, 2))
+      configCache.set('appConfig', config, 300) // Cache for 5 minutes
+
       return config
     } else {
       // this only exists for local development
