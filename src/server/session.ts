@@ -10,7 +10,7 @@ export async function useAppSession() {
 
   return useSession<SessionData>({
     // Session configuration
-    name: 'app-session',
+    name: '__session',
     password: config.JWT_SECRET,
     // Optional: customize cookie settings
     cookie: {
