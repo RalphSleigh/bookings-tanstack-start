@@ -7,6 +7,8 @@ const getCurrentUserFn = createServerFn({ method: 'GET' }).handler(async () => {
   const session = await useAppSession()
 
   console.log('CURRENT SESSION:', session)
+  console.log('CURRENT SESSION DATA:', session.data)
+
 
   const userId = session.data.userId
 
