@@ -2,9 +2,15 @@ import { userRepo } from '@/server/firestore'
 import { useAppSession } from '@/server/session'
 import { queryOptions } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
-import { getCookies } from '@tanstack/react-start/server'
+import { getCookies, getRequestHeaders } from '@tanstack/react-start/server'
 
 const getCurrentUserFn = createServerFn({ method: 'GET' }).handler(async () => {
+
+
+    const request = getRequestHeaders()
+    request.forEach((value, key) => {
+        console.log(`HEADER: ${key} = ${value}`)
+    })
 
   const cookie = getCookies()
 
